@@ -7,5 +7,7 @@ export interface TransactionsGateway {
 
     list(): Promise<Transactions[]>;
 
+    findById(transactionId: string): Promise<Transactions | null>;
+
     findeByAccountId(accountId: string): Promise<Transactions | null>;
 }

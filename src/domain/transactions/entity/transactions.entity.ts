@@ -29,6 +29,16 @@ export class Transactions {
         });
     }
 
+    public static reverse(transaction: Transactions): Transactions {
+        return new Transactions({
+            id: crypto.randomUUID(),
+            value: -transaction.value,
+            description: `reversal: ${transaction.description}`,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        });
+    }
+
     public static with(props: TransactionsProps) {
         return new Transactions(props);
     }
