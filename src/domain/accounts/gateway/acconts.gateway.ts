@@ -6,4 +6,6 @@ export interface AccountsGateway {
     list(): Promise<Accounts[]>;
 
     findById(id: string): Promise<Accounts | null>;
+
+    findBalanceByAccountId(accountId: string): Promise<number | null>;
 }
