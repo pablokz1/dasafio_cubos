@@ -2,7 +2,7 @@ export type PeopleProps = {
     id: string;
     name: string;
     document: string;
-    password: string;
+    password?: string;
     createdAt: Date;
     updatedAt: Date;
 }
