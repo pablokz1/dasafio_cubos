@@ -1,0 +1,61 @@
+import { Request, Response } from "express";
+import { ListPeopleInputDto, ListPeopleOutputDto, ListPeopleUsecase } from "../../../../../usecases/people/list-people/list-people.usecase";
+import { HttpMethod, Route } from "../route";
+
+export type ListPeopleResponseDto = {
+    peoples: {
+        id: string,
+        name: string,
+        document: string,
+        createdAt: Date,
+        updatedAt: Date,
+    }[];
+}
+
+export class ListPeopleRoute implements Route {
+    private constructor(
+        private readonly path: string,
+        private readonly method: HttpMethod,
+        private readonly listPeopleService: ListPeopleUsecase,
+    ) { }
+
+    public static create(listPeopleService: ListPeopleUsecase) {
+        return new ListPeopleRoute(
+            "/peoples",
+            HttpMethod.GET,
+            listPeopleService,
+        )
+    }
+
+    public getHandler() {
+        return async (request: Request, response: Response) => {
+            const output = await this.listPeopleService.execute();
+
+            const responseBody = this.present(output);
+
+            response.status(200).json(responseBody).send();
+        }
+    }
+
+    public getPath(): string {
+        return this.path;
+    }
+
+    public getMethod(): HttpMethod {
+        return this.method;
+    }
+
+    private present(input: ListPeopleOutputDto): ListPeopleResponseDto {
+        const response: ListPeopleResponseDto = {
+            peoples: input.peoples.map((p) => ({
+                id: p.id,
+                name: p.name,
+                document: p.doucument,
+                createdAt: p.createdAt,
+                updatedAt: p.updatedAt,
+            }))
+        }
+
+        return response;
+    }
+}
