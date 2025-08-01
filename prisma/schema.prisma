@@ -23,7 +23,7 @@ enum TypeTransactionEnum {
 model People {
   id        String    @id @default(uuid())
   name      String
-  document  String
+  document  String    @unique
   password  String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
