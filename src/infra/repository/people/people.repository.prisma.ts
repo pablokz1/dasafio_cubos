@@ -14,7 +14,7 @@ export class PeopleRepositoryPrisma implements PeopleGateway {
             id: people.id,
             name: people.name,
             document: people.document,
-            password: people.password, // ✅ Campo adicionado
+            password: people.password,
             createdAt: people.createdAt,
             updatedAt: people.updatedAt,
         };
@@ -55,7 +55,7 @@ export class PeopleRepositoryPrisma implements PeopleGateway {
     }
 
     public async findByDocument(document: string): Promise<People> {
-        const p = await this.prismaClient.people.findFirst({ where: { document } }); // ✅ findFirst
+        const p = await this.prismaClient.people.findFirst({ where: { document } });
 
         if (!p) {
             throw new Error(`People not found with document: ${document}`);
@@ -96,7 +96,7 @@ export class PeopleRepositoryPrisma implements PeopleGateway {
         const data = {
             name: people.name,
             document: people.document,
-            password: people.password, // ✅ Incluído por coerência com o create()
+            password: people.password,
             updatedAt: people.updatedAt,
         };
 

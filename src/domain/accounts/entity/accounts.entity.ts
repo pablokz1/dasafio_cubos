@@ -64,5 +64,4 @@ export class Accounts {
         this.props.updatedAt = new Date();
     }
 
-
 }

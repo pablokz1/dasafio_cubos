@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ListPeopleInputDto, ListPeopleOutputDto, ListPeopleUsecase } from "../../../../../usecases/people/list-people/list-people.usecase";
+import { ListPeopleOutputDto, ListPeopleUsecase } from "../../../../usecases/people/list-people/list-people.usecase";
 import { HttpMethod, Route } from "../route";
 
 export type ListPeopleResponseDto = {
@@ -21,7 +21,7 @@ export class ListPeopleRoute implements Route {
 
     public static create(listPeopleService: ListPeopleUsecase) {
         return new ListPeopleRoute(
-            "/peoples",
+            "/people",
             HttpMethod.GET,
             listPeopleService,
         )

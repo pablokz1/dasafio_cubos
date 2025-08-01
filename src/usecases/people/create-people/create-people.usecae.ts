@@ -1,43 +1,61 @@
-import { People } from "../../../domain/people/entity/people.entity"
-import type { PeopleGateway } from "../../../domain/people/gateway/people.gateway"
-import type { Usecase } from "../../usecase"
+import { ValidateGateway } from "../../../domain/compliance/validate/gateway/validate.gateway";
+import { People } from "../../../domain/people/entity/people.entity";
+import type { PeopleGateway } from "../../../domain/people/gateway/people.gateway";
+import type { Usecase } from "../../usecase";
 
 export type CreatePeopleInputDto = {
-    name: string,
-    document: string,
-    password: string,
-}
+  name: string;
+  document: string;
+  password: string;
+  accessToken: string;
+};
 
 export type CreatePeopleOutputDto = {
-    id: string,
-    name: string,
-    document: string,
-}
+  id: string;
+  name: string;
+  document: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export class CreatePeopleUsecase implements Usecase<CreatePeopleInputDto, CreatePeopleOutputDto> {
-    private constructor(private readonly peopleGateway: PeopleGateway) { }
+  private constructor(
+    private readonly peopleGateway: PeopleGateway,
+    private readonly validateGateway: ValidateGateway
+  ) { }
 
-    public static create(peopleGateway: PeopleGateway) {
-        return new CreatePeopleUsecase(peopleGateway)
+  public static create(peopleGateway: PeopleGateway, validateGateway: ValidateGateway) {
+    return new CreatePeopleUsecase(peopleGateway, validateGateway);
+  }
+
+  public async execute({ name, document, password, accessToken }: CreatePeopleInputDto): Promise<CreatePeopleOutputDto> {
+    const doc = document.replace(/[\.\-\/]/g, "");
+
+    let result;
+    if (/^\d{11}$/.test(doc)) {
+      result = await this.validateGateway.validateCpf(doc, accessToken);
+    } else if (/^\d{14}$/.test(doc)) {
+      result = await this.validateGateway.validateCnpj(doc, accessToken);
+    } else {
+      throw new Error("Invalid document: enter a CPF (11 digits) or CNPJ (14 digits)");
     }
 
-    public async execute({ name, document, password }: CreatePeopleInputDto): Promise<CreatePeopleOutputDto> {
-        const aPeople = People.create(name, document, password);
-
-        await this.peopleGateway.save(aPeople);
-
-        const output = this.presentOutput(aPeople);
-
-        return output;
+    if (!result.isValid()) {
+      throw new Error("Document not approved");
     }
 
-    private presentOutput(people: People) {
-        const output: CreatePeopleOutputDto = {
-            id: people.id,
-            name: people.name,
-            document: people.document
-        }
+    const aPeople = People.create(name, doc, password);
+    await this.peopleGateway.save(aPeople);
+    return this.presentOutput(aPeople);
+  }
 
-        return output;
-    }
+  private presentOutput(people: People): CreatePeopleOutputDto {
+    return {
+      id: people.id,
+      name: people.name,
+      document: people.document,
+      createdAt: people.createdAt,
+      updatedAt: people.updatedAt
+    };
+  }
 }
