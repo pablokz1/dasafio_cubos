@@ -1,5 +1,12 @@
-import { TypeTransactionEnum } from "../../enums/type-transactions.enum";
+export type TypeTransactionEnum = "TED" | "DOC" | "PIX" | "TRANSFERENCIA_INTERNA";
 
+export const TypeTransactionEnum = {
+  TED: 'TED' as TypeTransactionEnum,
+  DOC: 'DOC' as TypeTransactionEnum,
+  PIX: 'PIX' as TypeTransactionEnum,
+  TRANSFERENCIA_INTERNA: 'TRANSFERENCIA_INTERNA' as TypeTransactionEnum,
+} as const;
+ 
 export type TransactionsProps = {
     id: string;
     idOriginAccount: string,
