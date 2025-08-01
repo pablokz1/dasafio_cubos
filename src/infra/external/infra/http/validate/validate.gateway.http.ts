@@ -1,6 +1,6 @@
 import axios from "axios";
-import { ValidateGateway } from "../../../domain/compliance/validate/gateway/validate.gateway";
-import { Validate } from "../../../domain/compliance/validate/entity/validate.entity";
+import { ValidateGateway } from "../../../domain/validate/gateway/validate.gateway";
+import { Validate } from "../../../domain/validate/entity/validate.entity";
 
 const BASE_URL = process.env.API_COMPLIANCE_URL;
 
