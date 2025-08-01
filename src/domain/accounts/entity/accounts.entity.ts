@@ -1,8 +1,10 @@
 export type AccountsProps = {
     id: string;
+    idPeople: string;
     branch: string;
     account: string;
     balance: number;
+    isActive: boolean;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -10,12 +12,14 @@ export type AccountsProps = {
 export class Accounts {
     private constructor(private props: AccountsProps) {}
 
-    public static create(branch: string, account: string) { 
+    public static create(branch: string, account: string, idPeople: string) { 
         return new Accounts({
             id: crypto.randomUUID(),
+            idPeople,
             branch,
             account,
             balance: 0,
+            isActive: true,
             createdAt: new Date(),
             updatedAt: new Date()
         });

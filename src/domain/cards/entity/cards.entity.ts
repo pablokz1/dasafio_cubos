@@ -1,8 +1,10 @@
 export type CardsProps = {
     id: string;
+    idAccount: string;
     type: string;
     number: string;
     cvv: string;
+    isActive: boolean;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -10,12 +12,14 @@ export type CardsProps = {
 export class Cards {
     private constructor(private props: CardsProps) {}
 
-    public static create(type: string, number: string, cvv: string) { 
+    public static create(type: string, number: string, cvv: string, idAccount: string) { 
         return new Cards({
             id: crypto.randomUUID(),
+            idAccount,
             type,
             number,
             cvv,
+            isActive: true,
             createdAt: new Date(),
             updatedAt: new Date()
         });
@@ -27,6 +31,10 @@ export class Cards {
 
     public get id() {
         return this.props.id;
+    }
+
+    public get idAccount() {
+        return this.props.idAccount
     }
 
     public get type() {

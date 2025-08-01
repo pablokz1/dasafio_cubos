@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "dev": "ts-node src/main.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,7 +12,12 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^24.1.0",
+    "prisma": "^6.13.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.13.0",
+    "decimal.js": "^10.6.0"
   }
 }

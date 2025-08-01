@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum TypeTransactionEnum {
+  TED
+  PIX
+  DOC
+  TRANSFERENCIA_INTERNA
+}
+
+model People {
+  id        String    @id @default(uuid())
+  name      String
+  document  String
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  accounts  Account[]
+}
+
+model Account {
+  id                   String         @id @default(uuid())
+  branch               String
+  account              String
+  balance              Float
+  isActive             Boolean
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+
+  idPeople             String
+  people               People         @relation(fields: [idPeople], references: [id])
+
+  originTransactions   Transaction[]  @relation("OriginTransactions")
+  destinyTransactions  Transaction[]  @relation("DestinyTransactions")
+
+  cards                Card[]         // <== Campo de relação inversa
+}
+
+model Card {
+  id         String    @id @default(uuid())
+  type       String
+  number     String
+  cvv        String
+  isActive   Boolean
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  idAccount  String
+  account    Account   @relation(fields: [idAccount], references: [id])
+}
+
+model Transaction {
+  id                String              @id @default(uuid())
+  idOriginAccount   String
+  idDestinyAccount  String
+  value             Decimal @db.Decimal(15, 2)
+  description       String
+  type              TypeTransactionEnum
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  originAccount     Account             @relation("OriginTransactions", fields: [idOriginAccount], references: [id])
+  destinyAccount    Account             @relation("DestinyTransactions", fields: [idDestinyAccount], references: [id])
+}
