@@ -2,6 +2,7 @@ import { ValidateGateway } from "../../../domain/compliance/validate/gateway/val
 import { People } from "../../../domain/people/entity/people.entity";
 import type { PeopleGateway } from "../../../domain/people/gateway/people.gateway";
 import type { Usecase } from "../../usecase";
+import bcrypt from 'bcrypt';
 
 export type CreatePeopleInputDto = {
   name: string;
@@ -49,7 +50,9 @@ export class CreatePeopleUsecase implements Usecase<CreatePeopleInputDto, Create
       throw new Error("Document not approved");
     }
 
-    const aPeople = People.create(name, doc, password);
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const aPeople = People.create(name, doc, hashedPassword);
     await this.peopleGateway.save(aPeople);
     return this.presentOutput(aPeople);
   }

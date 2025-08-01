@@ -1,32 +1,48 @@
+import { Auth } from "../../../domain/auth/entity/auth.entity";
 import { AuthGateway } from "../../../domain/auth/gateway/auth.gateway";
-import { sign } from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 export class AuthRepository implements AuthGateway {
-    constructor(private readonly prisma: PrismaClient) { }
+    private prisma: PrismaClient;
 
-    async login(document: string, password: string): Promise<string> {
-        const cleanDoc = document.replace(/[^\d]/g, "");
+    constructor(prisma: PrismaClient) {
+        this.prisma = prisma;
+    }
 
+    async findByDocument(document: string): Promise<Auth | null> {
         const user = await this.prisma.people.findUnique({
-            where: { document: cleanDoc },
+            where: { document },
         });
 
         if (!user) {
-            throw new Error("User not found");
+            return null;
         }
 
-        // Comparando com a senha do banco (em texto simples)
-        if (password !== user.password) {
-            throw new Error("Invalid credentials");
+        return Auth.with({
+            document: user.document,
+            password: user.password,
+        });
+    }
+
+    async login(document: string, password: string): Promise<string> {
+        const auth = await this.findByDocument(document);
+        if (!auth) {
+            throw new Error("Document not found");
         }
 
-        const token = sign(
-            { sub: user.id, document: user.document, name: user.name },
-            process.env.JWT_SECRET || "default_jwt_secret",
-            { expiresIn: "1h" }
+        const isValidPassword = await bcrypt.compare(password, auth.password);
+        if (!isValidPassword) {
+            throw new Error("Invalid password");
+        }
+
+        const token = jwt.sign(
+            { document: auth.document },
+            process.env.JWT_SECRET || 'secret_key',
+            { expiresIn: '1h' }
         );
 
-        return `Bearer ${token}`;
+        return token;
     }
 }

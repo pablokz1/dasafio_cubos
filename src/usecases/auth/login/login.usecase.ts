@@ -1,6 +1,7 @@
-import { Auth } from "../../../domain/auth/entity/auth.entity";
 import { AuthGateway } from "../../../domain/auth/gateway/auth.gateway";
 import { Usecase } from "../../usecase";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 export type LoginUseCaseInput = {
     document: string;
@@ -12,11 +13,27 @@ export type LoginUseCaseOutput = {
 };
 
 export class LoginUseCase implements Usecase<LoginUseCaseInput, LoginUseCaseOutput> {
-    constructor(private authGateway: AuthGateway) {}
+    constructor(private authGateway: AuthGateway) { }
 
     async execute(input: LoginUseCaseInput): Promise<LoginUseCaseOutput> {
-        const auth = Auth.create(input.document, input.password);
-        const token = await this.authGateway.login(auth.document, auth.password);
+        const { document, password } = input;
+
+        const auth = await this.authGateway.findByDocument(document);
+        if (!auth) {
+            throw new Error("Document not found");
+        }
+
+        const isValidPassword = await bcrypt.compare(password, auth.password);
+        if (!isValidPassword) {
+            throw new Error("Invalid password");
+        }
+
+        const token = jwt.sign(
+            { document: auth.document },
+            process.env.JWT_SECRET || 'secret_key',
+            { expiresIn: '1h' }
+        );
+
         return { token };
     }
 }
