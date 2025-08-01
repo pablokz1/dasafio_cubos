@@ -54,12 +54,12 @@ export class PeopleRepositoryPrisma implements PeopleGateway {
         });
     }
 
-    public async findByDocument(document: string): Promise<People> {
-        const p = await this.prismaClient.people.findFirst({ where: { document } });
+    async findByDocument(document: string): Promise<People | null> {
+        const p = await this.prismaClient.people.findUnique({
+            where: { document },
+        });
 
-        if (!p) {
-            throw new Error(`People not found with document: ${document}`);
-        }
+        if (!p) return null;
 
         return People.with({
             id: p.id,

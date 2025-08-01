@@ -31,6 +31,11 @@ export class CreatePeopleUsecase implements Usecase<CreatePeopleInputDto, Create
   public async execute({ name, document, password, accessToken }: CreatePeopleInputDto): Promise<CreatePeopleOutputDto> {
     const doc = document.replace(/[\.\-\/]/g, "");
 
+    const existingPerson = await this.peopleGateway.findByDocument(doc);
+    if (existingPerson) {
+      throw new Error("Document already exists");
+    }
+
     let result;
     if (/^\d{11}$/.test(doc)) {
       result = await this.validateGateway.validateCpf(doc, accessToken);

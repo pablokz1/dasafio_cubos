@@ -3,13 +3,6 @@ import { ValidateGateway } from "../../../domain/compliance/validate/gateway/val
 import { Validate } from "../../../domain/compliance/validate/entity/validate.entity";
 
 const BASE_URL = process.env.API_COMPLIANCE_URL;
-const EMAIL = process.env.VALIDATE_EMAIL!;
-const PASSWORD = process.env.VALIDATE_PASSWORD!;
-
-if (!BASE_URL) {
-  console.error("API_COMPLIANCE_URL não está definida no arquivo .env");
-  throw new Error("API_COMPLIANCE_URL is not defined in the environment");
-}
 
 export class ValidateGatewayHttp implements ValidateGateway {
   private async postWithRetry(

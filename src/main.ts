@@ -9,7 +9,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 function main() {
-    console.log(process.env.API_COMPLIANCE_URL);
 
     const aRepository = PeopleRepositoryPrisma.create(prisma);
 
