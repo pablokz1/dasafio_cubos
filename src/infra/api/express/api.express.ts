@@ -12,11 +12,11 @@ export class ApiExpress implements Api {
         this.addRoutes(routes);
     }
 
-    public static create(routes: Route[]){
+    public static create(routes: Route[]) {
         return new ApiExpress(routes);
     }
 
-    private addRoutes(routes: Route[]){
+    private addRoutes(routes: Route[]) {
         routes.forEach((route) => {
             const path = route.getPath();
             const method = route.getMethod();
@@ -34,15 +34,18 @@ export class ApiExpress implements Api {
     }
 
     private listRoutes() {
+        if (!this.app._router) {
+            console.log("No routes registered yet.");
+            return;
+        }
+
         const routes = this.app._router.stack
-        .filter((route: any) => route.route)
-        .map((route: any) => {
-             return {
+            .filter((route: any) => route.route)
+            .map((route: any) => ({
                 path: route.route.path,
                 method: route.route.stack[0].method,
-            }
-        });
+        }));
 
-        console.log(routes)
+        console.log(routes);
     }
 }

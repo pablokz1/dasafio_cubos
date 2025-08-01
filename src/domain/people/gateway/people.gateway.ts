@@ -1,4 +1,4 @@
-import type { People } from "../entity/people.entity.js";
+import type { People } from "../entity/people.entity";
 
 export interface PeopleGateway {
     save(people: People): Promise<void>;

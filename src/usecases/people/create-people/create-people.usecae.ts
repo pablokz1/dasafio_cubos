@@ -1,6 +1,6 @@
-import { People } from "../../../domain/people/entity/people.entity.js"
-import type { PeopleGateway } from "../../../domain/people/gateway/people.gateway.js"
-import type { Usecase } from "../../usecase.js"
+import { People } from "../../../domain/people/entity/people.entity"
+import type { PeopleGateway } from "../../../domain/people/gateway/people.gateway"
+import type { Usecase } from "../../usecase"
 
 export type CreatePeopleInputDto = {
     name: string,

@@ -14,34 +14,35 @@ export class PeopleRepositoryPrisma implements PeopleGateway {
             id: people.id,
             name: people.name,
             document: people.document,
+            password: people.password, // ✅ Campo adicionado
             createdAt: people.createdAt,
             updatedAt: people.updatedAt,
-        }
+        };
 
-        await this.prismaClient.people.create({
-            data,
-        })
+        await this.prismaClient.people.create({ data });
     }
 
     public async list(): Promise<People[]> {
         const peoples = await this.prismaClient.people.findMany();
 
-        const peoplesList = peoples.map((p: any) => {
-            return People.with({
+        return peoples.map((p: any) =>
+            People.with({
                 id: p.id,
                 name: p.name,
                 document: p.document,
+                password: p.password,
                 createdAt: p.createdAt,
                 updatedAt: p.updatedAt,
-            });
-        });
-        return peoplesList;
+            })
+        );
     }
 
-    public async findById(id: string): Promise<People | null> {
+    public async findById(id: string): Promise<People> {
         const p = await this.prismaClient.people.findUnique({ where: { id } });
 
-        if (!p) return null;
+        if (!p) {
+            throw new Error(`People not found with ID: ${id}`);
+        }
 
         return People.with({
             id: p.id,
@@ -49,13 +50,16 @@ export class PeopleRepositoryPrisma implements PeopleGateway {
             document: p.document,
             createdAt: p.createdAt,
             updatedAt: p.updatedAt,
+            password: p.password,
         });
     }
 
-    public async findByDocument(document: string): Promise<People | null> {
-        const p = await this.prismaClient.people.findUnique({ where: { document } });
+    public async findByDocument(document: string): Promise<People> {
+        const p = await this.prismaClient.people.findFirst({ where: { document } }); // ✅ findFirst
 
-        if (!p) return null;
+        if (!p) {
+            throw new Error(`People not found with document: ${document}`);
+        }
 
         return People.with({
             id: p.id,
@@ -63,13 +67,16 @@ export class PeopleRepositoryPrisma implements PeopleGateway {
             document: p.document,
             createdAt: p.createdAt,
             updatedAt: p.updatedAt,
+            password: p.password,
         });
     }
 
-    public async findByName(name: string): Promise<People | null> {
+    public async findByName(name: string): Promise<People> {
         const p = await this.prismaClient.people.findFirst({ where: { name } });
 
-        if (!p) return null;
+        if (!p) {
+            throw new Error(`People not found with name: ${name}`);
+        }
 
         return People.with({
             id: p.id,
@@ -77,6 +84,7 @@ export class PeopleRepositoryPrisma implements PeopleGateway {
             document: p.document,
             createdAt: p.createdAt,
             updatedAt: p.updatedAt,
+            password: p.password,
         });
     }
 
@@ -88,6 +96,7 @@ export class PeopleRepositoryPrisma implements PeopleGateway {
         const data = {
             name: people.name,
             document: people.document,
+            password: people.password, // ✅ Incluído por coerência com o create()
             updatedAt: people.updatedAt,
         };
 

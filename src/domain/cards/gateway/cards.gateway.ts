@@ -1,4 +1,4 @@
-import type { Cards } from "../entity/cards.entity.js";
+import type { Cards } from "../entity/cards.entity";
 
 export interface CardsGateway {
     save(Cards: Cards): Promise<void>;

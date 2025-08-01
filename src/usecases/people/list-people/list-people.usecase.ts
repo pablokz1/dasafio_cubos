@@ -8,7 +8,7 @@ export type ListPeopleOutputDto = {
     peoples: {
         id: string,
         name: string,
-        doucument: string,
+        document: string,
         createdAt: Date,
         updatedAt: Date,
     }[];
@@ -35,7 +35,7 @@ export class ListPeopleUsecase implements Usecase<ListPeopleInputDto, ListPeople
                 return {
                     id: p.id,
                     name: p.name,
-                    doucument: p.document,
+                    document: p.document,
                     createdAt: p.createdAt,
                     updatedAt: p.updatedAt,
                 }

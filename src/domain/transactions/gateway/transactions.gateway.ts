@@ -1,4 +1,4 @@
-import type { Transactions } from "../entity/transactions.entity.js";
+import type { Transactions } from "../entity/transactions.entity";
 
 export interface TransactionsGateway {
     save(Transacrions: Transactions): Promise<void>;

@@ -50,7 +50,7 @@ export class ListPeopleRoute implements Route {
             peoples: input.peoples.map((p) => ({
                 id: p.id,
                 name: p.name,
-                document: p.doucument,
+                document: p.document,
                 createdAt: p.createdAt,
                 updatedAt: p.updatedAt,
             }))

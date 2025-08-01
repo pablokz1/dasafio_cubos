@@ -2,16 +2,16 @@ export type PeopleProps = {
     id: string;
     name: string;
     document: string;
-    password?: string;
+    password: string;
     createdAt: Date;
     updatedAt: Date;
 }
 
 export class People {
-    private constructor(private props: PeopleProps) { 
+    private constructor(private props: PeopleProps) {
     }
 
-    public static create(name: string, document: string, password: string) { 
+    public static create(name: string, document: string, password: string) {
         return new People({
             id: crypto.randomUUID(),
             name,
@@ -44,6 +44,10 @@ export class People {
 
     public get updatedAt() {
         return this.props.updatedAt;
+    }
+
+    public get password() {
+        return this.props.password;
     }
 
 }
