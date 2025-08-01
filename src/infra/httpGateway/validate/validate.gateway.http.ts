@@ -27,10 +27,6 @@ export class ValidateGatewayHttp implements ValidateGateway {
         });
         return response;
       } catch (error: any) {
-        console.error(
-          `[${new Date().toISOString()}] Error trying ${attempt} to call ${url}:`,
-          error.message
-        );
 
         if (attempt === retries) {
           throw new Error("Validation service currently unavailable.");
@@ -47,7 +43,7 @@ export class ValidateGatewayHttp implements ValidateGateway {
       { document },
       accessToken
     );
-    return Validate.with(response.data);
+    return Validate.with(response.data.data);
   }
 
   async validateCnpj(document: string, accessToken: string): Promise<Validate> {
@@ -56,6 +52,6 @@ export class ValidateGatewayHttp implements ValidateGateway {
       { document },
       accessToken
     );
-    return Validate.with(response.data);
+    return Validate.with(response.data.data);
   }
 }

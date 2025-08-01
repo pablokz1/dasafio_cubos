@@ -15,8 +15,8 @@ export type CreatePeopleResponseDto = {
 }
 
 export class CreatePeopleRoute implements Route {
-    EMAIL = process.env.EMAIL as string;
-    PASSWORD = process.env.PASSWORD as string;
+    EMAIL = process.env.EMAIL!;
+    PASSWORD = process.env.PASSWORD!;
 
     private constructor(
         private readonly path: string,
@@ -38,40 +38,31 @@ export class CreatePeopleRoute implements Route {
             const authGateway = new AuthGatewayHttp();
 
             try {
-                // 1. Autentica para obter o código e o token
-                const { authCode } = await authGateway.requestCode(this.EMAIL, this.PASSWORD);
+                const { authCode } = await authGateway.requestCode();
                 const { accessToken } = await authGateway.requestToken(authCode);
 
-                // 2. Chama o usecase passando o accessToken
                 const input: CreatePeopleInputDto = {
                     name,
                     document,
                     password,
-                    accessToken, // token obtido aqui
+                    accessToken,
                 };
 
                 const output: CreatePeopleResponseDto = await this.createPeopleService.execute(input);
 
                 const responseBody = this.present(output);
 
-                response.status(201).json({
-                    success: true,
-                    data: responseBody,
-                });
+                response.status(201).json(responseBody);
 
             } catch (error) {
-                console.error(`[${new Date().toISOString()}] Erro ao criar pessoa:`, error);
-
                 if (error instanceof Error) {
                     response.status(400).json({
-                        success: false,
                         message: error.message,
                     });
                     return;
                 }
 
                 response.status(500).json({
-                    success: false,
                     message: "Internal Server Error",
                 });
             }

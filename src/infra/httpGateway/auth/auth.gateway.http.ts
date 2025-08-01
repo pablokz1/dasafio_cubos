@@ -4,18 +4,26 @@ import { AuthGateway } from "../../../domain/compliance/auth/gateway/auth.gatewa
 const BASE_URL = process.env.API_COMPLIANCE_URL;
 
 export class AuthGatewayHttp implements AuthGateway {
-    async requestCode(email: string, password: string): Promise<{ userId: string; authCode: string }> {
-        const response = await axios.post(`${BASE_URL}/auth/code`, { email, password });
-        return response.data;
+    async requestCode(): Promise<{ userId: string; authCode: string }> {
+        const response = await axios.post(`${BASE_URL}/auth/code`, {
+            email: process.env.EMAIL,
+            password: process.env.SENHA
+        });
+
+        const { userId, authCode } = response.data.data;
+
+        return { userId, authCode };
     }
+
 
     async requestToken(authCode: string): Promise<{ idToken: string; accessToken: string; refreshToken: string }> {
         const response = await axios.post(`${BASE_URL}/auth/token`, { authCode });
-        return response.data;
+        return response.data.data;
     }
 
-    async refreshToken(refreshToken: string): Promise<{ accessToken: string; refreshToken: string }> {
+    async refreshToken(refreshToken: string): Promise<{ accessToken: string }> {
         const response = await axios.post(`${BASE_URL}/auth/refresh`, { refreshToken });
-        return response.data;
+        return response.data.data;
     }
+
 }
