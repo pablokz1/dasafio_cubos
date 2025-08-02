@@ -14,6 +14,7 @@ import { ListCardsByPeopleExpressRoute } from "./api/express/routes/card/list.ca
 import { CreateTransactionExpressRoute } from "./api/express/routes/transaction/create.transaction.express.route";
 import { CreateInternalTransactionExpressRoute } from "./api/express/routes/transaction/create.transaction.internal.express.route";
 import { ListTransactionsByExpressAccountRoute } from "./api/express/routes/transaction/liste.transactions.byaccount.express.route";
+import { GetBalanceAccountExpressRoute } from "./api/express/routes/accounts/get-balance.account.express.route";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ function main() {
 
     const createAccount = CreateAccountExpressRoute.create();
     const listAccountByPeople = ListAccountsByPeopleExpressRoute.create();
+    const getBalanceAccount = GetBalanceAccountExpressRoute.create();
 
     const creatCard = CreateCardExpressRoute.create();
     const listCardsByAccount = ListCardsByAccountExpressRoute.create();
@@ -45,6 +47,7 @@ function main() {
         loginRoute,
         createAccount,
         listAccountByPeople,
+        getBalanceAccount,
         creatCard,
         listCardsByAccount,
         listCardsByPeople,
