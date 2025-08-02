@@ -12,6 +12,7 @@ import { CreateCardExpressRoute } from "./api/express/routes/card/create.card.ex
 import { ListCardsByAccountExpressRoute } from "./api/express/routes/card/list.cards.byaccount.express.route";
 import { ListCardsByPeopleExpressRoute } from "./api/express/routes/card/list.cards.bypeople.express.route";
 import { CreateTransactionExpressRoute } from "./api/express/routes/transaction/create.transaction.express.route";
+import { CreateInternalTransactionExpressRoute } from "./api/express/routes/transaction/create.transaction.internal.express.route";
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ function main() {
     const listCardsByPeople = ListCardsByPeopleExpressRoute.create();
 
     const createTransaction = CreateTransactionExpressRoute.create();
+    const createTransactionInternal = CreateInternalTransactionExpressRoute.create();
 
     const api = ApiExpress.create([
         createRoute,
@@ -45,6 +47,7 @@ function main() {
         listCardsByAccount,
         listCardsByPeople,
         createTransaction,
+        createTransactionInternal,
     ]);
 
     const port = 8000;

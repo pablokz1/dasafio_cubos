@@ -45,6 +45,7 @@ export class TransactionRepositoryPrisma implements TransactionsGateway {
             _sum: { value: true },
         });
 
-        return parseFloat(result._sum?.value?.toFixed(2) ?? "0");
+        return result._sum.value?.toNumber() ?? 0;
     }
+
 }

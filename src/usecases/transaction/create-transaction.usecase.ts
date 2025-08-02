@@ -29,6 +29,7 @@ export class CreateTransactionUseCase implements Usecase<CreateTransactionInputD
     ) {
         return new CreateTransactionUseCase(transactionsGateway, accountsGateway);
     }
+
     async execute(input: CreateTransactionInputDto): Promise<CreateTransactionOutputDto> {
         const { accountId, value, description } = input;
 
@@ -53,6 +54,5 @@ export class CreateTransactionUseCase implements Usecase<CreateTransactionInputD
             updatedAt: transaction.updatedAt,
         };
     }
-
 
 }
