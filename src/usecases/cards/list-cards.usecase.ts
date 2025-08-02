@@ -6,17 +6,32 @@ export type ListCardsByAccountInputDto = {
   accountId: string;
 };
 
-export type ListCardsByAccountOutputDto = Card[];
+export type ListCardsByAccountOutputDto = {
+  id: string;
+  type: string;
+  number: string;
+  cvv: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
-export class ListCardsByAccountUseCase implements Usecase<ListCardsByAccountInputDto, ListCardsByAccountOutputDto> {
-  private constructor(private cardsGateway: CardsGateway) {}
+export class ListCardsByAccountUseCase implements Usecase<ListCardsByAccountInputDto, ListCardsByAccountOutputDto[]> {
+  private constructor(private cardsGateway: CardsGateway) { }
 
   public static create(cardsGateway: CardsGateway) {
     return new ListCardsByAccountUseCase(cardsGateway);
   }
 
-  async execute(input: ListCardsByAccountInputDto): Promise<ListCardsByAccountOutputDto> {
+  async execute(input: ListCardsByAccountInputDto): Promise<ListCardsByAccountOutputDto[]> {
     const cards = await this.cardsGateway.listByAccountId(input.accountId);
-    return cards;
+
+    return cards.map(card => ({
+      id: card.id,
+      type: card.type,
+      number: card.number,
+      cvv: card.cvv,
+      createdAt: card.createdAt,
+      updatedAt: card.updatedAt,
+    }));
   }
 }
