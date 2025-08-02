@@ -3,11 +3,13 @@ import type { Transactions } from "../entity/transactions.entity";
 export interface TransactionsGateway {
     save(Transacrions: Transactions): Promise<void>;
 
-    saveInternalTransactions(Transacrions: Transactions): Promise<void>;
+    getBalance(accountId: string): Promise<number>;
 
-    list(): Promise<Transactions[]>;
+    // saveInternalTransactions(Transacrions: Transactions): Promise<void>;
 
-    findById(transactionId: string): Promise<Transactions | null>;
+    // list(): Promise<Transactions[]>;
 
-    findeByAccountId(accountId: string): Promise<Transactions | null>;
+    // findById(transactionId: string): Promise<Transactions | null>;
+
+    // findeByAccountId(accountId: string): Promise<Transactions | null>;
 }

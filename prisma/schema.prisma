@@ -37,29 +37,28 @@ model People {
 }
 
 model Account {
-  id                   String         @id @default(uuid())
-  branch               String
-  account              String         @unique
-  createdAt            DateTime       @default(now())
-  updatedAt            DateTime       @updatedAt
-  isActive             Boolean
-  
-  idPeople             String
-  people               People         @relation(fields: [idPeople], references: [id])
+  id          String        @id @default(uuid())
+  branch      String
+  account     String        @unique
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  isActive    Boolean
 
-  originTransactions   Transaction[]  @relation("OriginTransactions")
-  destinyTransactions  Transaction[]  @relation("DestinyTransactions")
+  idPeople    String
+  people      People        @relation(fields: [idPeople], references: [id])
 
-  cards                Card[]         // <== Campo de relação inversa
+  transactions Transaction[] 
 
-  balance              Decimal        @default(0) @db.Decimal(18, 2)
+  cards       Card[]
+
+  balance     Decimal        @default(0) @db.Decimal(18, 2)
 }
 
 model Card {
   id         String    @id @default(uuid())
   type       CardType
-  number     String    // Número completo do cartão, mas resposta com últimos 4 digitos
-  cvv        String    @db.Char(3) // Garante 3 caracteres no nível do banco
+  number     String    
+  cvv        String    @db.Char(3) 
   isActive   Boolean   @default(true)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
@@ -71,15 +70,11 @@ model Card {
 }
 
 model Transaction {
-  id                String              @id @default(uuid())
-  idOriginAccount   String
-  idDestinyAccount  String
-  value             Decimal @db.Decimal(15, 2)
-  description       String
-  type              TypeTransactionEnum
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime            @updatedAt
-
-  originAccount     Account             @relation("OriginTransactions", fields: [idOriginAccount], references: [id])
-  destinyAccount    Account             @relation("DestinyTransactions", fields: [idDestinyAccount], references: [id])
+  id          String   @id @default(uuid())
+  value     Decimal        @default(0) @db.Decimal(18, 2)
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  idAccount  String
+  account    Account   @relation(fields: [idAccount], references: [id])
 }

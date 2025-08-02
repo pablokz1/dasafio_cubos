@@ -13,7 +13,7 @@ export type CreateCardInputDto = {
 export type CreateCardOutputDto = {
     id: string;
     type: 'physical' | 'virtual';
-    number: string; // últimos 4 dígitos só
+    number: string;
     cvv: string;
     createdAt: Date;
     updatedAt: Date;
