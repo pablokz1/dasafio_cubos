@@ -51,23 +51,4 @@ export class Accounts extends BaseEntity<AccountsProps> {
         return this.props.isActive;
     }
 
-    public deposit(amount: number) {
-        if (amount <= 0) {
-            throw new Error("Deposit amount must be greater than zero.");
-        }
-        this.props.balance += amount;
-        this.props.updatedAt = new Date();
-    }
-
-    public withdraw(amount: number) {
-        if (amount <= 0) {
-            throw new Error("Withdrawal amount must be greater than zero.");
-        }
-        if (amount > this.props.balance) {
-            throw new Error("Insufficient balance for withdrawal.");
-        }
-        this.props.balance -= amount;
-        this.props.updatedAt = new Date();
-    }
-
 }

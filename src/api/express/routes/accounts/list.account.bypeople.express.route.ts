@@ -5,7 +5,7 @@ import { AccountsRepositoryPrisma } from "../../../../infra/repository/accounts/
 import { PeopleRepositoryPrisma } from "../../../../infra/repository/people/people.repository.prisma";
 import { authMiddleware } from "../../middlewares/auth.middleware";
 import jwt from "jsonwebtoken";
-import { ListAccountsByPeopleUseCase } from "../../../../usecases/accounts/list-account-bypeople.usecase";
+import { ListAccountsByPeopleUseCase } from "../../../../usecases/account/list-account-bypeople.usecase";
 
 export type ListAccountsByPersonResponseDto = {
     accounts: {

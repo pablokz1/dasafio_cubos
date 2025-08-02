@@ -1,4 +1,3 @@
-import { Card } from "../../domain/cards/entity/cards.entity";
 import { CardsGateway } from "../../domain/cards/gateway/cards.gateway";
 import { Usecase } from "../usecase";
 

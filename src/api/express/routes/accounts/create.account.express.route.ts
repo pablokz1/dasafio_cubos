@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { HttpMethod, Route } from "../route";
-import { CreateAccountUseCase } from "../../../../usecases/accounts/create-account.usecase";
+import { CreateAccountUseCase } from "../../../../usecases/account/create-account.usecase";
 import { PrismaClient } from "@prisma/client";
 import { AccountsRepositoryPrisma } from "../../../../infra/repository/accounts/accounts.repository.prisma";
 import { authMiddleware } from "../../middlewares/auth.middleware";

@@ -33,14 +33,14 @@ export type ListCardsByPersonOutputDto = {
   };
 };
 
-export class ListCardsByPersonUseCase implements Usecase<ListCardsByPersonInputDto, ListCardsByPersonOutputDto> {
+export class ListCardsByPeopleUseCase implements Usecase<ListCardsByPersonInputDto, ListCardsByPersonOutputDto> {
     constructor(
         private readonly cardsGateway: CardsGateway,
         private readonly accountsGateway: AccountsGateway
     ) { }
 
     public static create(cardsGateway: CardsGateway, accountsGateway: AccountsGateway) {
-        return new ListCardsByPersonUseCase(cardsGateway, accountsGateway);
+        return new ListCardsByPeopleUseCase(cardsGateway, accountsGateway);
     }
 
     async execute(input: ListCardsByPersonInputDto): Promise<ListCardsByPersonOutputDto> {

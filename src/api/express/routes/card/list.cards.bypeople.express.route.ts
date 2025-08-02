@@ -4,20 +4,20 @@ import { PrismaClient } from "@prisma/client";
 import { CardsRepositoryPrisma } from "../../../../infra/repository/cards/cards.repository.prisma";
 import { AccountsRepositoryPrisma } from "../../../../infra/repository/accounts/accounts.repository.prisma";
 import { authMiddleware } from "../../middlewares/auth.middleware";
-import { ListCardsByPersonUseCase } from "../../../../usecases/cards/list-cards-beypeople.usecase";
+import { ListCardsByPeopleUseCase } from "../../../../usecases/cards/list-cards-beypeople.usecase";
 
 export class ListCardsByPeopleExpressRoute implements Route {
     private constructor(
         private readonly path: string,
         private readonly method: HttpMethod,
-        private readonly listCardsUseCase: ListCardsByPersonUseCase
+        private readonly listCardsUseCase: ListCardsByPeopleUseCase
     ) { }
 
     static create() {
         const prisma = new PrismaClient();
         const cardsRepository = new CardsRepositoryPrisma(prisma);
         const accountsRepository = new AccountsRepositoryPrisma(prisma);
-        const usecase = new ListCardsByPersonUseCase(cardsRepository, accountsRepository);
+        const usecase = new ListCardsByPeopleUseCase(cardsRepository, accountsRepository);
         return new ListCardsByPeopleExpressRoute("/people/cards", HttpMethod.GET, usecase);
     }
 

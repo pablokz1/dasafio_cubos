@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Route, HttpMethod } from "../route";
 import { PrismaClient } from "@prisma/client";
 import { AccountsRepositoryPrisma } from "../../../../infra/repository/accounts/accounts.repository.prisma";
-import { GetBalanceUseCase } from "../../../../usecases/accounts/get-balance.usecase";
+import { GetBalanceUseCase } from "../../../../usecases/account/get-balance.usecase";
 import { authMiddleware } from "../../middlewares/auth.middleware";
 
 export class GetBalanceAccountExpressRoute implements Route {
