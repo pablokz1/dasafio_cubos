@@ -3,7 +3,7 @@ import { CardsGateway } from "../../../domain/cards/gateway/cards.gateway";
 import { Card } from "../../../domain/cards/entity/cards.entity";
 
 export class CardsRepositoryPrisma implements CardsGateway {
-  constructor(private readonly prisma: PrismaClient) {}
+  constructor(private readonly prisma: PrismaClient) { }
 
   async save(card: Card): Promise<void> {
     await this.prisma.card.create({
@@ -33,6 +33,26 @@ export class CardsRepositoryPrisma implements CardsGateway {
         updatedAt: c.updatedAt,
       })
     );
+  }
+
+  async listByAccountIds(accountIds: string[], itemsPerPage: number, currentPage: number): Promise<Card[]> {
+    const skip = (currentPage - 1) * itemsPerPage;
+    const cards = await this.prisma.card.findMany({
+      where: { idAccount: { in: accountIds } },
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take: itemsPerPage,
+    });
+
+    return cards.map(c => Card.with({
+      id: c.id,
+      accountId: c.idAccount,
+      type: c.type as 'physical' | 'virtual',
+      number: c.number,
+      cvv: c.cvv,
+      createdAt: c.createdAt,
+      updatedAt: c.updatedAt,
+    }));
   }
 
   async findPhysicalCardByAccountId(accountId: string): Promise<Card | null> {

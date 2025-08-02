@@ -4,4 +4,5 @@ export interface CardsGateway {
     save(card: Card): Promise<void>;
     listByAccountId(accountId: string): Promise<Card[]>;
     findPhysicalCardByAccountId(accountId: string): Promise<Card | null>;
+    listByAccountIds(accountIds: string[], itemsPerPage: number, currentPage: number): Promise<Card[]>;
 }
