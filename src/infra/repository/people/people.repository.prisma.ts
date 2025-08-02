@@ -70,39 +70,4 @@ export class PeopleRepositoryPrisma implements PeopleGateway {
             password: p.password,
         });
     }
-
-    public async findByName(name: string): Promise<People> {
-        const p = await this.prismaClient.people.findFirst({ where: { name } });
-
-        if (!p) {
-            throw new Error(`People not found with name: ${name}`);
-        }
-
-        return People.with({
-            id: p.id,
-            name: p.name,
-            document: p.document,
-            createdAt: p.createdAt,
-            updatedAt: p.updatedAt,
-            password: p.password,
-        });
-    }
-
-    public async delete(id: string): Promise<void> {
-        await this.prismaClient.people.delete({ where: { id } });
-    }
-
-    public async update(people: People): Promise<void> {
-        const data = {
-            name: people.name,
-            document: people.document,
-            password: people.password,
-            updatedAt: people.updatedAt,
-        };
-
-        await this.prismaClient.people.update({
-            where: { id: people.id },
-            data,
-        });
-    }
 }

@@ -1,25 +1,27 @@
-export type TransactionsProps = {
-    id: string;
+import { BaseEntity, BaseEntityProps } from "../../base/base.entity";
+
+export type TransactionsProps = BaseEntityProps & {
     value: number;
     description: string;
     accountId: string,
-    createdAt: Date;
-    updatedAt: Date;
     revertedFromId: string | null;
 }
 
-export class Transactions {
-    private constructor(private props: TransactionsProps) { }
+export class Transactions extends BaseEntity<TransactionsProps> {
+    private constructor(props: TransactionsProps) {
+        super(props)
+    }
 
     public static create(accountId: string, value: number, description: string) {
+        const now = new Date();
         return new Transactions({
             id: crypto.randomUUID(),
             accountId: accountId,
             description,
             value,
             revertedFromId: null,
-            createdAt: new Date(),
-            updatedAt: new Date()
+            createdAt: now,
+            updatedAt: now
         });
     }
 
@@ -51,10 +53,6 @@ export class Transactions {
         return new Transactions(props);
     }
 
-    public get id() {
-        return this.props.id;
-    }
-
     public get value() {
         return this.props.value;
     }
@@ -65,14 +63,6 @@ export class Transactions {
 
     public get description() {
         return this.props.description;
-    }
-
-    public get createdAt() {
-        return this.props.createdAt;
-    }
-
-    public get updatedAt() {
-        return this.props.updatedAt;
     }
 
     public get revertedFromId() {

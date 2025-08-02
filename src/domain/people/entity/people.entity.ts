@@ -1,33 +1,30 @@
-export type PeopleProps = {
-    id: string;
+import { BaseEntity, BaseEntityProps } from "../../base/base.entity";
+
+export type PeopleProps = BaseEntityProps & {
     name: string;
     document: string;
     password: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
+};
 
-export class People {
-    private constructor(private props: PeopleProps) {
+export class People extends BaseEntity<PeopleProps> {
+    private constructor(props: PeopleProps) {
+        super(props);
     }
 
     public static create(name: string, document: string, password: string) {
+        const now = new Date();
         return new People({
             id: crypto.randomUUID(),
             name,
             document,
             password,
-            createdAt: new Date(),
-            updatedAt: new Date()
+            createdAt: now,
+            updatedAt: now,
         });
     }
 
     public static with(props: PeopleProps) {
         return new People(props);
-    }
-
-    public get id() {
-        return this.props.id;
     }
 
     public get name() {
@@ -36,14 +33,6 @@ export class People {
 
     public get document() {
         return this.props.document;
-    }
-
-    public get createdAt() {
-        return this.props.createdAt;
-    }
-
-    public get updatedAt() {
-        return this.props.updatedAt;
     }
 
     public get password() {

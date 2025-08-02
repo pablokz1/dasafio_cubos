@@ -1,34 +1,32 @@
-export type CardProps = {
-    id: string;
+import { BaseEntity, BaseEntityProps } from "../../base/base.entity";
+
+export type CardProps = BaseEntityProps & {
     accountId: string;
     type: 'physical' | 'virtual';
     number: string;
     cvv: string;
-    createdAt: Date;
-    updatedAt: Date;
 };
 
-export class Card {
-    private constructor(private props: CardProps) { }
+export class Card extends BaseEntity<CardProps> {
+    private constructor(props: CardProps) {
+        super(props);
+    }
 
     public static create(accountId: string, type: 'physical' | 'virtual', number: string, cvv: string) {
+        const now = new Date();
         return new Card({
             id: crypto.randomUUID(),
             accountId,
             type,
             number,
             cvv,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            createdAt: now,
+            updatedAt: now,
         });
     }
 
     public static with(props: CardProps) {
         return new Card(props);
-    }
-
-    public get id() {
-        return this.props.id;
     }
 
     public get type() {
@@ -46,12 +44,5 @@ export class Card {
     public get accountId() {
         return this.props.accountId;
     }
-
-    public get createdAt() {
-        return this.props.createdAt;
-    }
-
-    public get updatedAt() {
-        return this.props.updatedAt;
-    }
 }
+

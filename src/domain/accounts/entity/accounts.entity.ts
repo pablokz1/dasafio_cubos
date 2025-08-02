@@ -1,18 +1,20 @@
-export type AccountsProps = {
-    id: string;
+import { BaseEntity, BaseEntityProps } from "../../base/base.entity";
+
+export type AccountsProps = BaseEntityProps & {
     idPeople: string;
     branch: string;
     account: string;
     balance: number;
     isActive: boolean;
-    createdAt: Date;
-    updatedAt: Date;
 }
 
-export class Accounts {
-    private constructor(private props: AccountsProps) {}
+export class Accounts extends BaseEntity<AccountsProps> {
+    private constructor(props: AccountsProps) {
+        super(props)
+    }
 
-    public static create(branch: string, account: string, idPeople: string) { 
+    public static create(branch: string, account: string, idPeople: string) {
+        const now = new Date();
         return new Accounts({
             id: crypto.randomUUID(),
             idPeople,
@@ -20,17 +22,13 @@ export class Accounts {
             account,
             balance: 0,
             isActive: true,
-            createdAt: new Date(),
-            updatedAt: new Date()
+            createdAt: now,
+            updatedAt: now
         });
     }
 
     public static with(props: AccountsProps) {
         return new Accounts(props);
-    }
-
-    public get id() {
-        return this.props.id;
     }
 
     public get branch() {
@@ -51,15 +49,6 @@ export class Accounts {
 
     public get isActive() {
         return this.props.isActive;
-    }
-
-    public get createdAt() {
-        return this.props.createdAt;
-    }
-   
-   
-    public get updatedAt() {
-        return this.props.updatedAt;
     }
 
     public deposit(amount: number) {
