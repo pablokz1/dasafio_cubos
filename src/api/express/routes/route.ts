@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, RequestHandler } from "express";
 
 export type HttpMethod = "get" | "post" | "put" | "delete";
 
@@ -15,4 +15,6 @@ export interface Route {
     getPath(): string;
 
     getMethod(): HttpMethod;
+
+    getMiddlewares?(): RequestHandler[];
 }

@@ -7,7 +7,7 @@ export interface PeopleGateway {
 
     findById(id: string): Promise<People | null>;
 
-    findByDocument(document: string): Promise<People | null>;
+    findByDocument(document: string): Promise<{ id: string } | null>;
 
     findByName(name: string): Promise<People | null>;
 

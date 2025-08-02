@@ -21,26 +21,15 @@ export class ApiExpress implements Api {
             const path = route.getPath();
             const method = route.getMethod();
             const handler = route.getHandler();
+            const middlewares = route.getMiddlewares ? route.getMiddlewares() : [];
 
-            this.app[method](path, handler);
+            this.app[method](path, ...middlewares, handler);
         });
     }
 
     public start(port: number): void {
         this.app.listen(port, () => {
             console.log(`Server running on port ${port}`);
-            // this.listRoutes();
         })
     }
-
-    // private listRoutes() {
-    //     const routes = this.app._router.stack
-    //         .filter((route: any) => route.route)
-    //         .map((route: any) => ({
-    //             path: route.route.path,
-    //             method: route.route.stack[0].method,
-    //     }));
-
-    //     console.log(routes);
-    // }
 }

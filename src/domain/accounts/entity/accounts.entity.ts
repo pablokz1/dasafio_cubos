@@ -45,6 +45,23 @@ export class Accounts {
         return this.props.balance;
     }
 
+    public get idPeople() {
+        return this.props.idPeople;
+    }
+
+    public get isActive() {
+        return this.props.isActive;
+    }
+
+    public get createdAt() {
+        return this.props.createdAt;
+    }
+   
+   
+    public get updatedAt() {
+        return this.props.updatedAt;
+    }
+
     public deposit(amount: number) {
         if (amount <= 0) {
             throw new Error("Deposit amount must be greater than zero.");

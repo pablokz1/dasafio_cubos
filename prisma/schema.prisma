@@ -34,12 +34,11 @@ model People {
 model Account {
   id                   String         @id @default(uuid())
   branch               String
-  account              String
-  balance              Float
-  isActive             Boolean
+  account              String         @unique
   createdAt            DateTime       @default(now())
   updatedAt            DateTime       @updatedAt
-
+  isActive             Boolean
+  
   idPeople             String
   people               People         @relation(fields: [idPeople], references: [id])
 
@@ -47,6 +46,8 @@ model Account {
   destinyTransactions  Transaction[]  @relation("DestinyTransactions")
 
   cards                Card[]         // <== Campo de relação inversa
+
+  balance              Decimal        @default(0) @db.Decimal(18, 2)
 }
 
 model Card {
