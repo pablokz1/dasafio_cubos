@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { TransactionsGateway } from "../../../domain/transactions/gateway/transactions.gateway";
 import { Transactions } from "../../../domain/transactions/entity/transactions.entity";
+import Decimal from "decimal.js";
 
 export class TransactionRepositoryPrisma implements TransactionsGateway {
     constructor(private readonly prismaClient: PrismaClient) { }
@@ -18,9 +19,23 @@ export class TransactionRepositoryPrisma implements TransactionsGateway {
                 createdAt: transaction.createdAt,
                 updatedAt: transaction.updatedAt,
                 account: {
-                    connect: { id: transaction.accountId }
+                    connect: { id: transaction.accountId },
                 },
             },
+        });
+
+        const account = await this.prismaClient.account.findUniqueOrThrow({
+            where: { id: transaction.accountId },
+        });
+
+        const currentBalance = new Decimal(account.balance);
+        const transactionValue = new Decimal(transaction.value);
+
+        const newBalance = currentBalance.plus(transactionValue);
+
+        await this.prismaClient.account.update({
+            where: { id: transaction.accountId },
+            data: { balance: newBalance },
         });
     }
 
@@ -30,7 +45,6 @@ export class TransactionRepositoryPrisma implements TransactionsGateway {
             _sum: { value: true },
         });
 
-        return result._sum?.value?.toNumber() ?? 0;
+        return parseFloat(result._sum?.value?.toFixed(2) ?? "0");
     }
-
 }
