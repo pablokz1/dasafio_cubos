@@ -20,6 +20,11 @@ enum TypeTransactionEnum {
   TRANSFERENCIA_INTERNA
 }
 
+enum CardType {
+  PHYSICAL
+  VIRTUAL
+}
+
 model People {
   id        String    @id @default(uuid())
   name      String
@@ -52,15 +57,17 @@ model Account {
 
 model Card {
   id         String    @id @default(uuid())
-  type       String
-  number     String
-  cvv        String
-  isActive   Boolean
+  type       CardType
+  number     String    // Número completo do cartão, mas resposta com últimos 4 digitos
+  cvv        String    @db.Char(3) // Garante 3 caracteres no nível do banco
+  isActive   Boolean   @default(true)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 
   idAccount  String
   account    Account   @relation(fields: [idAccount], references: [id])
+
+  @@index([idAccount, type], name: "idx_unique_physical_per_account")
 }
 
 model Transaction {

@@ -1,40 +1,34 @@
-export type CardsProps = {
+export type CardProps = {
     id: string;
-    idAccount: string;
-    type: string;
+    accountId: string;
+    type: 'physical' | 'virtual';
     number: string;
     cvv: string;
-    isActive: boolean;
     createdAt: Date;
     updatedAt: Date;
-}
+};
 
-export class Cards {
-    private constructor(private props: CardsProps) {}
+export class Card {
+    private constructor(private props: CardProps) { }
 
-    public static create(type: string, number: string, cvv: string, idAccount: string) { 
-        return new Cards({
+    public static create(accountId: string, type: 'physical' | 'virtual', number: string, cvv: string) {
+        return new Card({
             id: crypto.randomUUID(),
-            idAccount,
+            accountId,
             type,
             number,
             cvv,
-            isActive: true,
             createdAt: new Date(),
-            updatedAt: new Date()
+            updatedAt: new Date(),
         });
     }
 
-    public static with(props: CardsProps) {
-        return new Cards(props);
+    public static with(props: CardProps) {
+        return new Card(props);
     }
 
     public get id() {
         return this.props.id;
-    }
-
-    public get idAccount() {
-        return this.props.idAccount
     }
 
     public get type() {
@@ -49,4 +43,15 @@ export class Cards {
         return this.props.cvv;
     }
 
+    public get accountId() {
+        return this.props.accountId;
+    }
+
+    public get createdAt() {
+        return this.props.createdAt;
+    }
+
+    public get updatedAt() {
+        return this.props.updatedAt;
+    }
 }

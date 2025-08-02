@@ -8,6 +8,7 @@ import { ListPeopleUsecase } from "./usecases/people/list-people/list-people.use
 import { CreateAccountExpressRoute } from "./api/express/routes/accounts/create.account.express.route";
 import dotenv from 'dotenv';
 import { ListAccountsByPeopleExpressRoute } from "./api/express/routes/accounts/list.account.bypeople.express.route";
+import { CreateCardExpressRoute } from "./api/express/routes/card/create.card.express.route";
 
 dotenv.config();
 
@@ -25,12 +26,15 @@ function main() {
     const createAccount = CreateAccountExpressRoute.create();
     const listAccountByPeople = ListAccountsByPeopleExpressRoute.create();
 
+    const creatCard = CreateCardExpressRoute.create();
+
     const api = ApiExpress.create([
         createRoute,
         listRoute,
         loginRoute,
         createAccount,
         listAccountByPeople,
+        creatCard,
     ]);
 
     const port = 8000;
