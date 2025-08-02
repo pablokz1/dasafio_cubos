@@ -27,8 +27,8 @@ export class CreateAccountExpressRoute implements Route {
     static create() {
         const prisma = new PrismaClient();
         const accountsRepository = new AccountsRepositoryPrisma(prisma);
-        const peopleRepository = PeopleRepositoryPrisma.create(prisma); // ✅ usa o factory
-        const createAccountService = CreateAccountUseCase.create(accountsRepository, peopleRepository); // ✅ usa o static create
+        const peopleRepository = PeopleRepositoryPrisma.create(prisma);
+        const createAccountService = CreateAccountUseCase.create(accountsRepository, peopleRepository);
 
         return new CreateAccountExpressRoute("/people/accounts", HttpMethod.POST, createAccountService);
     }

@@ -1,6 +1,7 @@
 import { Api } from "../api";
 import express, { Express } from 'express';
 import { Route } from "./routes/route";
+import { errorMiddleware } from "./middlewares/error.middleware";
 
 
 export class ApiExpress implements Api {
@@ -27,7 +28,12 @@ export class ApiExpress implements Api {
         });
     }
 
+    private configureMiddleware(): void {
+        this.app.use(errorMiddleware);
+    }
+
     public start(port: number): void {
+        this.configureMiddleware();
         this.app.listen(port, () => {
             console.log(`Server running on port ${port}`);
         })

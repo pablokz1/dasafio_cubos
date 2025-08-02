@@ -22,7 +22,7 @@ export class ValidateGatewayHttp implements ValidateGateway {
       } catch (error: any) {
 
         if (attempt === retries) {
-          throw new Error("Validation service currently unavailable.");
+          throw new Error("Invalid document.");
         }
 
         await new Promise((res) => setTimeout(res, 500 * attempt));

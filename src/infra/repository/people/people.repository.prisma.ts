@@ -25,7 +25,7 @@ export class PeopleRepositoryPrisma implements PeopleGateway {
     public async list(): Promise<People[]> {
         const peoples = await this.prismaClient.people.findMany();
 
-        return peoples.map((p: any) =>
+        return peoples.map(p =>
             People.with({
                 id: p.id,
                 name: p.name,
