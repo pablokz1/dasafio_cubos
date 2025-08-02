@@ -1,7 +1,8 @@
-import { Accounts } from "../../../domain/accounts/entity/accounts.entity";
-import { AccountsGateway } from "../../../domain/accounts/gateway/acconts.gateway";
-import { Usecase } from "../../usecase";
-import { CreateAccountOutputDto } from "../create-account/create-account.usecase";
+import { Accounts } from "../../domain/accounts/entity/accounts.entity";
+import { AccountsGateway } from "../../domain/accounts/gateway/acconts.gateway";
+import { Usecase } from "../usecase";
+import { CreateAccountOutputDto } from "./create-account.usecase";
+
 
 export type ListAccountsInputDto = {
     idPeople: string;

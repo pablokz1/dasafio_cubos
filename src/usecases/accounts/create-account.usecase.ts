@@ -1,7 +1,7 @@
-import { PeopleGateway } from "../../../domain/people/gateway/people.gateway";
-import { Usecase } from "../../usecase";
-import { AccountsGateway } from "../../../domain/accounts/gateway/acconts.gateway";
-import { Accounts } from "../../../domain/accounts/entity/accounts.entity";
+import { Accounts } from "../../domain/accounts/entity/accounts.entity";
+import { AccountsGateway } from "../../domain/accounts/gateway/acconts.gateway";
+import { PeopleGateway } from "../../domain/people/gateway/people.gateway";
+import { Usecase } from "../usecase";
 
 export type CreateAccountInputDto = {
     branch: string;

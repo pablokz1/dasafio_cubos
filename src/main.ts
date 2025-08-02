@@ -4,8 +4,8 @@ import { ListPeopleRoute } from "./api/express/routes/people/list.people.express
 import { LoginExpressRoute } from "./api/express/routes/auth/login.express.route";
 import { PeopleRepositoryPrisma } from "./infra/repository/people/people.repository.prisma";
 import { prisma } from "./packege/prisma/prisma";
-import { ListPeopleUsecase } from "./usecases/people/list-people/list-people.usecase";
 import { CreateAccountExpressRoute } from "./api/express/routes/accounts/create.account.express.route";
+import { ListPeopleUsecase } from "./usecases/people/list-people.usecase";
 import dotenv from 'dotenv';
 import { ListAccountsByPeopleExpressRoute } from "./api/express/routes/accounts/list.account.bypeople.express.route";
 import { CreateCardExpressRoute } from "./api/express/routes/card/create.card.express.route";

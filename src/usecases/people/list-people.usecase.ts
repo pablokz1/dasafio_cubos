@@ -1,6 +1,6 @@
-import { People } from "../../../domain/people/entity/people.entity";
-import { PeopleGateway } from "../../../domain/people/gateway/people.gateway";
-import { Usecase } from "../../usecase";
+import { People } from "@prisma/client";
+import { PeopleGateway } from "../../domain/people/gateway/people.gateway";
+import { Usecase } from "../usecase";
 
 export type ListPeopleInputDto = void;
 

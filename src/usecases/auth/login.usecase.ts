@@ -1,5 +1,5 @@
-import { AuthGateway } from "../../../domain/auth/gateway/auth.gateway";
-import { Usecase } from "../../usecase";
+import { Usecase } from '../usecase';
+import { AuthGateway } from '../../domain/auth/gateway/auth.gateway';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 

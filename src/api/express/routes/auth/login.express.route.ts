@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { HttpMethod, Route } from "../route";
-import { LoginUseCase } from "../../../../usecases/auth/login/login.usecase";
 import { PrismaClient } from "@prisma/client";
 import { AuthRepository } from "../../../../infra/repository/auth/auth.repository";
+import { LoginUseCase } from "../../../../usecases/auth/login.usecase";
 
 export type LoginResponseDto = {
     token: string;

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { ListPeopleOutputDto, ListPeopleUsecase } from "../../../../usecases/people/list-people/list-people.usecase";
 import { HttpMethod, Route } from "../route";
+import { ListPeopleOutputDto, ListPeopleUsecase } from "../../../../usecases/people/list-people.usecase";
 
 export type ListPeopleResponseDto = {
     peoples: {
@@ -47,7 +47,7 @@ export class ListPeopleRoute implements Route {
 
     private present(input: ListPeopleOutputDto): ListPeopleResponseDto {
         const response: ListPeopleResponseDto = {
-            peoples: input.peoples.map((p) => ({
+            peoples: input.peoples.map(p => ({
                 id: p.id,
                 name: p.name,
                 document: p.document,

@@ -1,8 +1,8 @@
-import { People } from "../../../domain/people/entity/people.entity";
-import type { PeopleGateway } from "../../../domain/people/gateway/people.gateway";
-import { ValidateGateway } from "../../../infra/external/domain/validate/gateway/validate.gateway";
-import type { Usecase } from "../../usecase";
 import bcrypt from 'bcrypt';
+import { Usecase } from '../usecase';
+import { PeopleGateway } from '../../domain/people/gateway/people.gateway';
+import { ValidateGateway } from '../../infra/external/domain/validate/gateway/validate.gateway';
+import { People } from '../../domain/people/entity/people.entity';
 
 export type CreatePeopleInputDto = {
   name: string;

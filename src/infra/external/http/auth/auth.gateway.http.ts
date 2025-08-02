@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AuthGateway } from "../../../domain/auth/gateway/auth.gateway";
+import { AuthGateway } from "../../domain/auth/gateway/auth.gateway";
 
 const BASE_URL = process.env.API_COMPLIANCE_URL;
 
