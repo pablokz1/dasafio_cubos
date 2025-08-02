@@ -5,6 +5,7 @@ export type TransactionsProps = {
     accountId: string,
     createdAt: Date;
     updatedAt: Date;
+    revertedFromId: string | null;
 }
 
 export class Transactions {
@@ -16,6 +17,7 @@ export class Transactions {
             accountId: accountId,
             description,
             value,
+            revertedFromId: null,
             createdAt: new Date(),
             updatedAt: new Date()
         });
@@ -27,6 +29,7 @@ export class Transactions {
             value,
             description,
             accountId,
+            revertedFromId: null,
             createdAt: new Date(),
             updatedAt: new Date()
         });
@@ -39,7 +42,8 @@ export class Transactions {
             accountId: accountId,
             description: `reversal: ${transaction.description}`,
             createdAt: new Date(),
-            updatedAt: new Date()
+            updatedAt: new Date(),
+            revertedFromId: transaction.id
         });
     }
 
@@ -66,9 +70,13 @@ export class Transactions {
     public get createdAt() {
         return this.props.createdAt;
     }
-    
+
     public get updatedAt() {
-        return this.props.createdAt;
+        return this.props.updatedAt;
+    }
+
+    public get revertedFromId() {
+        return this.props.revertedFromId
     }
 
 }

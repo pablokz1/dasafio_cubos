@@ -15,6 +15,7 @@ import { CreateTransactionExpressRoute } from "./api/express/routes/transaction/
 import { CreateInternalTransactionExpressRoute } from "./api/express/routes/transaction/create.transaction.internal.express.route";
 import { ListTransactionsByExpressAccountRoute } from "./api/express/routes/transaction/liste.transactions.byaccount.express.route";
 import { GetBalanceAccountExpressRoute } from "./api/express/routes/accounts/get-balance.account.express.route";
+import { RevertTransactionExpressRoute } from "./api/express/routes/transaction/revert.transaction.express.route";
 
 dotenv.config();
 
@@ -40,6 +41,7 @@ function main() {
     const createTransaction = CreateTransactionExpressRoute.create();
     const createTransactionInternal = CreateInternalTransactionExpressRoute.create();
     const listTransactionByAccount = ListTransactionsByExpressAccountRoute.create();
+    const reverrTransaction = RevertTransactionExpressRoute.create()
 
     const api = ApiExpress.create([
         createRoute,
@@ -54,6 +56,7 @@ function main() {
         createTransaction,
         createTransactionInternal,
         listTransactionByAccount,
+        reverrTransaction,
     ]);
 
     const port = 8000;
