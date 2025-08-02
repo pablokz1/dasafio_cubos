@@ -39,13 +39,50 @@ export class TransactionRepositoryPrisma implements TransactionsGateway {
         });
     }
 
-    async getBalance(accountId: string): Promise<number> {
+    public async getBalance(accountId: string): Promise<number> {
         const result = await this.prismaClient.transaction.aggregate({
             where: { idAccount: accountId },
             _sum: { value: true },
         });
 
         return result._sum.value?.toNumber() ?? 0;
+    }
+
+    public async listByAccountId(
+        accountId: string,
+        itemsPerPage: number,
+        currentPage: number,
+        type?: "credit" | "debit"
+    ): Promise<Transactions[]> {
+        const where: any = {
+            idAccount: accountId,
+        };
+
+        if (type === "credit") {
+            where.value = { gte: 0 };
+        } else if (type === "debit") {
+            where.value = { lt: 0 };
+        }
+
+        const skip = (currentPage - 1) * itemsPerPage;
+
+        const results = await this.prismaClient.transaction.findMany({
+            where,
+            skip,
+            take: itemsPerPage,
+            orderBy: { createdAt: "desc" },
+        });
+
+        return results.map((row) =>
+            Transactions.with({
+                id: row.id,
+                value: row.value.toNumber(),
+                description: row.description,
+                accountId: row.idAccount,
+                createdAt: row.createdAt,
+                updatedAt: row.updatedAt,
+            })
+        );
     }
 
 }
