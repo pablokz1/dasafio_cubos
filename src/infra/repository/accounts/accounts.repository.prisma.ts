@@ -39,6 +39,25 @@ export class AccountsRepositoryPrisma implements AccountsGateway {
         );
     }
 
+    async listByPersonId(idPeople: string): Promise<Accounts[]> {
+        const accountsData = await this.prisma.account.findMany({
+            where: { idPeople },
+        });
+
+        return accountsData.map((a) =>
+            Accounts.with({
+                id: a.id,
+                idPeople: a.idPeople,
+                branch: a.branch,
+                account: a.account,
+                balance: Number(a.balance),
+                isActive: a.isActive,
+                createdAt: a.createdAt,
+                updatedAt: a.updatedAt,
+            })
+        );
+    }
+
     async findById(id: string): Promise<Accounts | null> {
         const account = await this.prisma.account.findUnique({
             where: {

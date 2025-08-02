@@ -7,6 +7,7 @@ import { prisma } from "./packege/prisma/prisma";
 import { ListPeopleUsecase } from "./usecases/people/list-people/list-people.usecase";
 import { CreateAccountExpressRoute } from "./api/express/routes/accounts/create.account.express.route";
 import dotenv from 'dotenv';
+import { ListAccountsByPeopleExpressRoute } from "./api/express/routes/accounts/list.account.bypeople.express.route";
 
 dotenv.config();
 
@@ -22,12 +23,14 @@ function main() {
     const loginRoute = LoginExpressRoute.create();
 
     const createAccount = CreateAccountExpressRoute.create();
+    const listAccountByPeople = ListAccountsByPeopleExpressRoute.create();
 
     const api = ApiExpress.create([
         createRoute,
         listRoute,
         loginRoute,
         createAccount,
+        listAccountByPeople,
     ]);
 
     const port = 8000;

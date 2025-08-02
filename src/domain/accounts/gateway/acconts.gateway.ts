@@ -10,4 +10,6 @@ export interface AccountsGateway {
     findByAccount(accountId: string): Promise<Accounts | null>
 
     findBalanceByAccountId(accountId: string): Promise<number | null>;
+
+    listByPersonId(idPeople: string): Promise<Accounts[]>;
 }
