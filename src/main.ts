@@ -13,7 +13,7 @@ import { ListCardsByAccountExpressRoute } from "./api/express/routes/card/list.c
 import { ListCardsByPeopleExpressRoute } from "./api/express/routes/card/list.cards.bypeople.express.route";
 import { CreateTransactionExpressRoute } from "./api/express/routes/transaction/create.transaction.express.route";
 import { CreateInternalTransactionExpressRoute } from "./api/express/routes/transaction/create.transaction.internal.express.route";
-import { ListTransactionsByExpressAccountRoute } from "./api/express/routes/transaction/liste.transactions.byaccount.express.route";
+import { ListTransactionsByExpressAccountRoute } from "./api/express/routes/transaction/list.transactions.byaccount.express.route";
 import { GetBalanceAccountExpressRoute } from "./api/express/routes/accounts/get-balance.account.express.route";
 import { RevertTransactionExpressRoute } from "./api/express/routes/transaction/revert.transaction.express.route";
 

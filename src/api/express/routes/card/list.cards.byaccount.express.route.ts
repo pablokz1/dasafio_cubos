@@ -10,7 +10,7 @@ export class ListCardsByAccountExpressRoute implements Route {
     private readonly path: string,
     private readonly method: HttpMethod,
     private readonly listCardsByAccountUseCase: ListCardsByAccountUseCase
-  ) {}
+  ) { }
 
   static create() {
     const prisma = new PrismaClient();
@@ -26,7 +26,8 @@ export class ListCardsByAccountExpressRoute implements Route {
   public getHandler() {
     return async (req: Request, res: Response): Promise<void> => {
       const accountId = req.params.accountId;
-      if (!accountId) {
+
+      if (!accountId || accountId.trim() === "") {
         res.status(400).json({ message: "accountId is required" });
         return;
       }

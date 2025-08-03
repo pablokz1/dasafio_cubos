@@ -25,8 +25,8 @@ export class RevertTransactionExpressRoute implements Route {
 
     getHandler() {
         return async (req: Request, res: Response): Promise<void> => {
-            const accountId = req.params.accountId;
-            const transactionId = req.params.transactionId;
+            const accountId = req.params.accountId?.trim();
+            const transactionId = req.params.transactionId?.trim();
 
             if (!accountId || !transactionId) {
                 res.status(400).json({ message: "Missing accountId or transactionId" });

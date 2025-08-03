@@ -13,8 +13,14 @@ export class ApiExpress implements Api {
         this.addRoutes(routes);
     }
 
+    public getApp(): Express {
+        return this.app;
+    }
+
     public static create(routes: Route[]) {
-        return new ApiExpress(routes);
+        const api = new ApiExpress(routes);
+        api.configureMiddleware();
+        return api;
     }
 
     private addRoutes(routes: Route[]) {

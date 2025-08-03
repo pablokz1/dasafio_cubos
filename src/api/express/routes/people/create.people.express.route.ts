@@ -3,8 +3,8 @@ import { HttpMethod, Route } from "../route";
 import { PeopleRepositoryPrisma } from "../../../../infra/repository/people/people.repository.prisma";
 import { PrismaClient } from "@prisma/client";
 import { CreatePeopleInputDto, CreatePeopleUsecase } from "../../../../usecases/people/create-people.usecae";
-import { ValidateGatewayHttp } from "../../../../infra/external/http/auth/validate/validate.gateway.http";
 import { AuthGatewayHttp } from "../../../../infra/external/http/auth/auth.gateway.http";
+import { ValidateGatewayHttp } from "../../../../infra/external/http/validate/validate.gateway.http";
 
 export type CreatePeopleResponseDto = {
     id: string,

@@ -43,7 +43,7 @@ export class CreateCardExpressRoute implements Route {
 
     public getHandler() {
         return async (request: Request, response: Response): Promise<void> => {
-            const accountId = request.params.accountId;
+            const accountId = request.params.accountId?.trim();
 
             if (!accountId) {
                 response.status(400).json({ message: "Parâmetro 'accountId' é obrigatório." });
@@ -71,7 +71,6 @@ export class CreateCardExpressRoute implements Route {
             }
         };
     }
-
 
     public getPath(): string {
         return this.path;

@@ -26,8 +26,8 @@ export class ListTransactionsByExpressAccountRoute implements Route {
 
     public getHandler() {
         return async (request: Request, response: Response): Promise<void> => {
-            const { accountId } = request.params;
-            if (!accountId) {
+            const accountId = request.params.accountId;
+            if (!accountId || accountId.trim() === "") {
                 response.status(400).json({ message: "Parâmetro 'accountId' é obrigatório." });
                 return;
             }
