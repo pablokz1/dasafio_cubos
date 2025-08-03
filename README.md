@@ -29,6 +29,27 @@ cd dasafio_cubos
 npm install
 ```
 
+---
+
+## 📦 Utilizando Docker
+
+Caso prefira rodar o projeto utilizando containers, você pode usar o arquivo `docker-compose.yml` incluso no repositório para subir o banco de dados PostgreSQL automaticamente.
+
+### 🐳 Subindo com Docker
+
+1. Certifique-se de que o Docker está instalado e em execução na sua máquina.
+
+2. No diretório raiz do projeto, execute:
+
+```bash
+docker-compose up -d
+```
+
+3. O banco de dados estará disponível no host `localhost`, porta `5432`, com as credenciais definidas no arquivo `.env`.
+
+4. Após o banco estar disponível, gere o cliente Prisma e aplique as migrações normalmente
+
+
 ## 🧱 Prisma
 
 Gere o cliente Prisma e aplique as migrações (se houver):
