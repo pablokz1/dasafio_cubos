@@ -19,18 +19,18 @@ export type ListCardsByPersonInputDto = {
 };
 
 export type ListCardsByPersonOutputDto = {
-  cards: {
-    id: string;
-    type: string;
-    number: string;
-    cvv: string;
-    createdAt: Date;
-    updatedAt: Date;
-  }[];
-  pagination: {
-    itemsPerPage: number;
-    currentPage: number;
-  };
+    cards: {
+        id: string;
+        type: string;
+        number: string;
+        cvv: string;
+        createdAt: Date;
+        updatedAt: Date;
+    }[];
+    pagination: {
+        itemsPerPage: number;
+        currentPage: number;
+    };
 };
 
 export class ListCardsByPeopleUseCase implements Usecase<ListCardsByPersonInputDto, ListCardsByPersonOutputDto> {

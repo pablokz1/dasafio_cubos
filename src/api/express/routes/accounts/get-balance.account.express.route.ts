@@ -5,6 +5,10 @@ import { AccountsRepositoryPrisma } from "../../../../infra/repository/accounts/
 import { GetBalanceUseCase } from "../../../../usecases/account/get-balance.usecase";
 import { authMiddleware } from "../../middlewares/auth.middleware";
 
+type BalanceResponseDTO = {
+    balance: number;
+};
+
 export class GetBalanceAccountExpressRoute implements Route {
     private constructor(
         private readonly path: string,
@@ -30,7 +34,8 @@ export class GetBalanceAccountExpressRoute implements Route {
 
             try {
                 const result = await this.usecase.execute({ accountId });
-                res.status(200).json(result);
+                const response = this.present(result);
+                res.status(200).json(response);
             } catch (error) {
                 if (error instanceof Error) {
                     res.status(404).json({ message: error.message });
@@ -40,7 +45,6 @@ export class GetBalanceAccountExpressRoute implements Route {
             }
         };
     }
-
 
     public getPath(): string {
         return this.path;
@@ -52,5 +56,11 @@ export class GetBalanceAccountExpressRoute implements Route {
 
     public getMiddlewares() {
         return [authMiddleware];
+    }
+
+    private present(input: BalanceResponseDTO): BalanceResponseDTO {
+        return {
+            balance: input.balance,
+        };
     }
 }

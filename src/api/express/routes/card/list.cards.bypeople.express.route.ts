@@ -4,7 +4,22 @@ import { PrismaClient } from "@prisma/client";
 import { CardsRepositoryPrisma } from "../../../../infra/repository/cards/cards.repository.prisma";
 import { AccountsRepositoryPrisma } from "../../../../infra/repository/accounts/accounts.repository.prisma";
 import { authMiddleware } from "../../middlewares/auth.middleware";
-import { ListCardsByPeopleUseCase } from "../../../../usecases/cards/list-cards-beypeople.usecase";
+import { ListCardsByPeopleUseCase, ListCardsByPersonOutputDto } from "../../../../usecases/cards/list-cards-beypeople.usecase";
+
+type ListCardsByPeopleResponseDTO = {
+    cards: {
+        id: string;
+        type: string;
+        number: string;
+        cvv: string;
+        createdAt: Date;
+        updatedAt: Date;
+    }[];
+    pagination: {
+        itemsPerPage: number;
+        currentPage: number;
+    };
+};
 
 export class ListCardsByPeopleExpressRoute implements Route {
     private constructor(
@@ -24,7 +39,6 @@ export class ListCardsByPeopleExpressRoute implements Route {
     public getHandler() {
         return async (req: Request, res: Response): Promise<void> => {
             const personId = (req as any).idPeople as string;
-
             const itemsPerPage = Number(req.query.itemsPerPage) || 10;
             const currentPage = Number(req.query.currentPage) || 1;
 
@@ -35,7 +49,8 @@ export class ListCardsByPeopleExpressRoute implements Route {
                     currentPage,
                 });
 
-                res.status(200).json(output);
+                const response = this.present(output);
+                res.status(200).json(response);
             } catch (error) {
                 if (error instanceof Error) {
                     res.status(400).json({ message: error.message });
@@ -57,4 +72,21 @@ export class ListCardsByPeopleExpressRoute implements Route {
     public getMiddlewares() {
         return [authMiddleware];
     }
+
+    private present(input: ListCardsByPersonOutputDto): ListCardsByPeopleResponseDTO {
+        return {
+            cards: input.cards.map(card => ({
+                id: card.id,
+                type: card.type as 'physical' | 'virtual',
+                number: card.number,
+                cvv: card.cvv,
+                createdAt: card.createdAt,
+                updatedAt: card.updatedAt,
+            })),
+            pagination: {
+                ...input.pagination,
+            },
+        };
+    }
+
 }

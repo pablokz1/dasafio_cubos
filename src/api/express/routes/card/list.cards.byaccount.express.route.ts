@@ -5,6 +5,15 @@ import { CardsRepositoryPrisma } from "../../../../infra/repository/cards/cards.
 import { authMiddleware } from "../../middlewares/auth.middleware";
 import { ListCardsByAccountUseCase } from "../../../../usecases/cards/list-cards.usecase";
 
+type ListCardResponseDTO = {
+  id: string;
+  type: string;
+  number: string;
+  cvv: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export class ListCardsByAccountExpressRoute implements Route {
   private constructor(
     private readonly path: string,
@@ -25,7 +34,7 @@ export class ListCardsByAccountExpressRoute implements Route {
 
   public getHandler() {
     return async (req: Request, res: Response): Promise<void> => {
-      const accountId = req.params.accountId;
+      const { accountId } = req.params;
 
       if (!accountId || accountId.trim() === "") {
         res.status(400).json({ message: "accountId is required" });
@@ -33,8 +42,9 @@ export class ListCardsByAccountExpressRoute implements Route {
       }
 
       try {
-        const cards = await this.listCardsByAccountUseCase.execute({ accountId });
-        res.status(200).json(cards);
+        const rawCards = await this.listCardsByAccountUseCase.execute({ accountId });
+        const response = this.presentMany(rawCards);
+        res.status(200).json(response);
       } catch (error) {
         if (error instanceof Error) {
           res.status(400).json({ message: error.message });
@@ -55,5 +65,16 @@ export class ListCardsByAccountExpressRoute implements Route {
 
   public getMiddlewares() {
     return [authMiddleware];
+  }
+
+  private presentMany(cards: ListCardResponseDTO[]): ListCardResponseDTO[] {
+    return cards.map(card => ({
+      id: card.id,
+      type: card.type,
+      number: card.number,
+      cvv: card.cvv,
+      createdAt: card.createdAt,
+      updatedAt: card.updatedAt,
+    }));
   }
 }

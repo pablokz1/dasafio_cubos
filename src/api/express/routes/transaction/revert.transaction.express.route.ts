@@ -5,6 +5,14 @@ import { authMiddleware } from "../../middlewares/auth.middleware";
 import { RevertTransactionUseCase } from "../../../../usecases/transaction/revert-transaction.usecase";
 import { TransactionRepositoryPrisma } from "../../../../infra/repository/transaction/transaction.repository.prisma";
 
+type RevertTransactionResponseDTO = {
+    id: string;
+    value: number;
+    description: string;
+    createdAt: Date;
+    updatedAt: Date;
+};
+
 export class RevertTransactionExpressRoute implements Route {
     private constructor(
         private readonly path: string,
@@ -35,7 +43,8 @@ export class RevertTransactionExpressRoute implements Route {
 
             try {
                 const output = await this.useCase.execute({ accountId, transactionId });
-                res.status(200).json(output);
+                const responseDto = this.present(output);
+                res.status(200).json(responseDto);
             } catch (error) {
                 if (error instanceof Error) {
                     res.status(400).json({ message: error.message });
@@ -43,10 +52,8 @@ export class RevertTransactionExpressRoute implements Route {
                     res.status(500).json({ message: "Internal Server Error" });
                 }
             }
-
         };
     }
-
 
     getPath(): string {
         return this.path;
@@ -59,4 +66,15 @@ export class RevertTransactionExpressRoute implements Route {
     getMiddlewares() {
         return [authMiddleware];
     }
+
+    private present(input: RevertTransactionResponseDTO): RevertTransactionResponseDTO {
+        return {
+            id: input.id,
+            value: input.value,
+            description: input.description,
+            createdAt: input.createdAt,
+            updatedAt: input.updatedAt,
+        };
+    }
+
 }
