@@ -4,7 +4,6 @@ import { authMiddleware } from "../../middlewares/auth.middleware";
 import { ListTransactionsByAccountUseCase } from "../../../../usecases/transaction/list-transactions-by-account.usecase";
 import { PrismaClient } from "@prisma/client";
 import { TransactionRepositoryPrisma } from "../../../../infra/repository/transaction/transaction.repository.prisma";
-import { AccountsRepositoryPrisma } from "../../../../infra/repository/accounts/accounts.repository.prisma";
 
 export class ListTransactionsByExpressAccountRoute implements Route {
     private constructor(

@@ -1,0 +1,814 @@
+openapi: 3.0.0
+info:
+  title: API Documentation
+  version: "1.0.0"
+  description: This is the API documentation for my application.
+
+servers:
+  - url: http://localhost:8000
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+
+paths:
+  /login:
+    post:
+      tags:
+        - Auth
+      summary: Realiza login do usuário
+      description: Autentica o usuário e retorna um token JWT para acesso às rotas protegidas.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - document
+                - password
+              properties:
+                document:
+                  type: string
+                  description: Documento do usuário (CPF, RG, etc.)
+                password:
+                  type: string
+                  description: Senha do usuário
+      responses:
+        '200':
+          description: Login realizado com sucesso, retorna token JWT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Token JWT para autenticação
+        '401':
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Credenciais inválidas
+        '500':
+          description: Erro interno do servidor
+
+  /people/accounts:
+    get:
+      tags:
+        - Accounts
+      summary: Lista as contas da pessoa autenticada
+      description: Retorna a lista de contas associadas à pessoa autenticada. Requer autenticação.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de contas retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accounts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: ID da conta
+                        branch:
+                          type: string
+                          description: Agência da conta
+                        account:
+                          type: string
+                          description: Número da conta
+                        createdAt:
+                          type: string
+                          format: date-time
+                        updatedAt:
+                          type: string
+                          format: date-time
+        '400':
+          description: Requisição inválida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Não autorizado (token ausente ou inválido)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Pessoa não encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Erro interno do servidor
+
+    post:
+      tags:
+        - Accounts
+      summary: Cria uma nova conta para a pessoa autenticada
+      description: Cria uma conta vinculada à pessoa autenticada. Requer autenticação.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - branch
+                - account
+              properties:
+                branch:
+                  type: string
+                  description: Agência da conta
+                account:
+                  type: string
+                  description: Número da conta
+      responses:
+        '201':
+          description: Conta criada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: ID gerado da conta
+                  branch:
+                    type: string
+                    description: Agência da conta
+                  account:
+                    type: string
+                    description: Número da conta
+        '400':
+          description: Requisição inválida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Não autorizado
+        '500':
+          description: Erro interno do servidor
+
+  /people/accounts/{accountId}/balance:
+    get:
+      tags:
+        - Accounts
+      summary: Obtém o saldo de uma conta específica
+      description: Retorna o saldo atual da conta informada. Requer autenticação.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: ID da conta para obter o saldo
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Saldo da conta obtido com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: number
+                    format: float
+                    description: Saldo atual da conta
+        '400':
+          description: Parâmetro inválido ou ausente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Conta não encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Erro interno do servidor
+
+  /people/accounts/{accountId}/cards:
+    get:
+      tags:
+        - Cards
+      summary: Lista os cartões de uma conta específica
+      description: Retorna a lista de cartões associados à conta informada. Requer autenticação.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: ID da conta para listar os cartões
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de cartões obtida com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: ID do cartão
+                    type:
+                      type: string
+                      enum:
+                        - physical
+                        - virtual
+                      description: Tipo do cartão
+                    number:
+                      type: string
+                      description: Número do cartão
+                    cvv:
+                      type: string
+                      description: Código CVV do cartão
+                    createdAt:
+                      type: string
+                      format: date-time
+                    updatedAt:
+                      type: string
+                      format: date-time
+        '400':
+          description: Requisição inválida (ex: accountId não informado)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Não autorizado
+        '500':
+          description: Erro interno do servidor
+
+    post:
+      tags:
+        - Cards
+      summary: Cria um novo cartão para uma conta
+      description: Cria um cartão físico ou virtual para a conta especificada. Requer autenticação.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: ID da conta à qual o cartão será associado
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - number
+                - cvv
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - physical
+                    - virtual
+                  description: Tipo do cartão (físico ou virtual)
+                number:
+                  type: string
+                  description: Número do cartão
+                cvv:
+                  type: string
+                  description: Código CVV do cartão
+      responses:
+        '201':
+          description: Cartão criado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  type:
+                    type: string
+                    enum:
+                      - physical
+                      - virtual
+                  number:
+                    type: string
+                  cvv:
+                    type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+                  updatedAt:
+                    type: string
+                    format: date-time
+        '400':
+          description: Requisição inválida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Não autorizado
+        '500':
+          description: Erro interno do servidor
+
+  /people/cards:
+    get:
+      tags:
+        - Cards
+      summary: Lista os cartões associados a uma pessoa
+      description: Retorna uma lista paginada de cartões vinculados à pessoa autenticada. Requer autenticação.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: itemsPerPage
+          in: query
+          required: false
+          description: Número de itens por página (padrão: 10)
+          schema:
+            type: integer
+            minimum: 1
+        - name: currentPage
+          in: query
+          required: false
+          description: Página atual (padrão: 1)
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Lista de cartões obtida com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalItems:
+                    type: integer
+                    description: Total de cartões encontrados
+                  currentPage:
+                    type: integer
+                    description: Página atual
+                  itemsPerPage:
+                    type: integer
+                    description: Itens por página
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: ID do cartão
+                        type:
+                          type: string
+                          enum:
+                            - physical
+                            - virtual
+                          description: Tipo do cartão
+                        number:
+                          type: string
+                          description: Número do cartão
+                        cvv:
+                          type: string
+                          description: Código CVV do cartão
+                        createdAt:
+                          type: string
+                          format: date-time
+                        updatedAt:
+                          type: string
+                          format: date-time
+        '400':
+          description: Requisição inválida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Não autorizado
+        '500':
+          description: Erro interno do servidor
+
+  /people:
+    post:
+      tags:
+        - People
+      summary: Cria uma nova pessoa
+      description: Cria um novo registro de pessoa no sistema. Requer autenticação interna para obtenção do token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - document
+                - password
+              properties:
+                name:
+                  type: string
+                  description: Nome da pessoa
+                document:
+                  type: string
+                  description: Documento da pessoa (CPF, RG, etc.)
+                password:
+                  type: string
+                  description: Senha para acesso
+      responses:
+        '201':
+          description: Pessoa criada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: ID gerado da pessoa
+                  name:
+                    type: string
+                  document:
+                    type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+                  updatedAt:
+                    type: string
+                    format: date-time
+        '400':
+          description: Requisição inválida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Erro interno do servidor
+
+    get:
+      tags:
+        - People
+      summary: Lista todas as pessoas
+      description: Retorna uma lista de pessoas cadastradas no sistema.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de pessoas retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  people:                        # corrigido aqui
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: ID da pessoa
+                        name:
+                          type: string
+                        document:
+                          type: string
+                        createdAt:
+                          type: string
+                          format: date-time
+                        updatedAt:
+                          type: string
+                          format: date-time
+        '401':
+          description: Não autorizado
+        '500':
+          description: Erro interno do servidor
+
+  /people/accounts/{accountId}/transactions:
+    post:
+      tags:
+        - Transactions
+      summary: Cria uma nova transação
+      description: Cria uma transação de crédito ou débito para uma conta. O tipo será determinado pela lógica interna com base no valor.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: ID da conta que receberá a transação
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - value
+                - description
+              properties:
+                value:
+                  type: number
+                  description: Valor da transação. Valores negativos indicam débito.
+                description:
+                  type: string
+                  description: Descrição da transação
+      responses:
+        '201':
+          description: Transação criada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  value:
+                    type: number
+                  description:
+                    type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+                  updatedAt:
+                    type: string
+                    format: date-time
+        '400':
+          description: Erro de validação ou transação inválida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Não autorizado
+        '500':
+          description: Erro interno do servidor
+
+    get:
+      tags:
+        - Transactions
+      summary: Lista transações por conta
+      description: Retorna uma lista paginada de transações (crédito ou débito) de uma conta específica.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: ID da conta cujas transações serão listadas
+          schema:
+            type: string
+        - name: itemsPerPage
+          in: query
+          required: false
+          description: Número de itens por página (padrão: 10)
+          schema:
+            type: integer
+            minimum: 1
+        - name: currentPage
+          in: query
+          required: false
+          description: Página atual (padrão: 1)
+          schema:
+            type: integer
+            minimum: 1
+        - name: type
+          in: query
+          required: false
+          description: Filtra pelo tipo de transação (credit ou debit)
+          schema:
+            type: string
+            enum: [credit, debit]
+      responses:
+        '200':
+          description: Lista de transações obtida com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  currentPage:
+                    type: integer
+                  itemsPerPage:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        value:
+                          type: number
+                        description:
+                          type: string
+                        type:
+                          type: string
+                          enum: [credit, debit]
+                        createdAt:
+                          type: string
+                          format: date-time
+                        updatedAt:
+                          type: string
+                          format: date-time
+        '400':
+          description: Erro de validação ou parâmetro inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Não autorizado
+
+  /people/accounts/{accountId}/transactions/internal:
+    post:
+      tags:
+        - Transactions
+      summary: Transfere valor entre contas internas
+      description: Realiza uma transferência interna entre contas. Requer autenticação.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: ID da conta remetente
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - receiverAccountId
+                - value
+                - description
+              properties:
+                receiverAccountId:
+                  type: string
+                  description: ID da conta destinatária
+                value:
+                  type: number
+                  description: Valor a ser transferido
+                description:
+                  type: string
+                  description: Descrição da transação
+      responses:
+        '201':
+          description: Transferência realizada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  value:
+                    type: number
+                  description:
+                    type: string
+                  createdAt:
+                    type: string
+                    format: date-time
+                  updatedAt:
+                    type: string
+                    format: date-time
+        '400':
+          description: Erro de validação ou transferência inválida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Não autorizado
+        '500':
+          description: Erro interno do servidor
+
+  /people/accounts/{accountId}/transactions/{transactionId}/revert:
+    post:
+      tags:
+        - Transactions
+      summary: Reverte uma transação
+      description: Reverte uma transação de uma conta, caso permitido. Requer autenticação.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: ID da conta
+          schema:
+            type: string
+        - name: transactionId
+          in: path
+          required: true
+          description: ID da transação a ser revertida
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Transação revertida com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  accountId:
+                    type: string
+                  value:
+                    type: number
+                  type:
+                    type: string
+                    enum: [credit, debit]
+                  revertedFromId:
+                    type: string
+                    nullable: true
+        '400':
+          description: Requisição inválida ou transação não pode ser revertida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  

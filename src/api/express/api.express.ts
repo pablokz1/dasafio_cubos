@@ -1,8 +1,9 @@
 import { Api } from "../api";
 import express, { Express } from 'express';
+import cors from 'cors';              
 import { Route } from "./routes/route";
 import { errorMiddleware } from "./middlewares/error.middleware";
-
+import { setupSwagger } from "../swagger";
 
 export class ApiExpress implements Api {
     private app: Express;
@@ -10,6 +11,14 @@ export class ApiExpress implements Api {
     private constructor(routes: Route[]) {
         this.app = express();
         this.app.use(express.json());
+
+        this.app.use(cors({
+            origin: 'http://localhost:8000',
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            allowedHeaders: ['Content-Type', 'Authorization'],
+            credentials: true,
+        }));
+
         this.addRoutes(routes);
     }
 
@@ -20,6 +29,7 @@ export class ApiExpress implements Api {
     public static create(routes: Route[]) {
         const api = new ApiExpress(routes);
         api.configureMiddleware();
+        setupSwagger(api.app);
         return api;
     }
 
@@ -42,6 +52,7 @@ export class ApiExpress implements Api {
         this.configureMiddleware();
         this.app.listen(port, () => {
             console.log(`Server running on port ${port}`);
-        })
+            console.log(`Swagger UI available at http://localhost:${port}/api-docs`);
+        });
     }
 }
