@@ -29,21 +29,6 @@ cd dasafio_cubos
 npm install
 ```
 
----
-
-## ⚙️ Configuração do Ambiente
-
-Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
-
-```env
-DATABASE_URL="postgresql://usuario:senha@localhost:5432/nome_do_banco"
-JWT_SECRET="sua_chave_jwt_secreta"
-```
-
-> Altere os valores conforme sua configuração de banco de dados.
-
----
-
 ## 🧱 Prisma
 
 Gere o cliente Prisma e aplique as migrações (se houver):
