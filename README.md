@@ -1,4 +1,4 @@
-# Dasafio Cubos
+# Desafio Cubos
 
 Este projeto é uma API REST construída com **Node.js**, **Express**, **TypeScript** e **Prisma ORM**, utilizando os princípios da **Clean Architecture** e **SOLID** para garantir escalabilidade, manutenibilidade e testabilidade.
 
